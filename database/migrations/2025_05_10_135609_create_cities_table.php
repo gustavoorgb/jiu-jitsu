@@ -12,6 +12,7 @@ return new class extends Migration {
         Schema::create('cities', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('city');
+            $table->geometry('coordinate', subtype: 'point');
             $table->foreignId('state_id')->constrained();
         });
     }

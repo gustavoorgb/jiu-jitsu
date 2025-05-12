@@ -24,9 +24,6 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
-        'phone',
-        'active',
-        'description'
     ];
 
     /**
@@ -48,7 +45,6 @@ class User extends Authenticatable {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'active' => UserStatus::class,
         ];
     }
 
@@ -63,6 +59,6 @@ class User extends Authenticatable {
     }
 
     public function owner() {
-        return $this->hasOne(AcademyOwner::class);
+        return $this->belongsToMany(AcademyOwner::class);
     }
 }

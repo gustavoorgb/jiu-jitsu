@@ -25,6 +25,6 @@ class Academies extends Model {
     }
 
     public function owner() {
-        return $this->belongsTo(AcademyOwner::class);
+        return $this->belongsToMany(AcademyOwner::class);
     }
 }
