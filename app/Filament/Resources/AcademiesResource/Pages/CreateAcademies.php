@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\AcademiesResource\Pages;
 
 use App\Filament\Resources\AcademiesResource;
-use Filament\Actions;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAcademies extends CreateRecord {
@@ -11,5 +11,25 @@ class CreateAcademies extends CreateRecord {
 
     protected function getRedirectUrl(): string {
         return AcademiesResource::getUrl('index');
+    }
+
+    public function getBreadcrumb(): string {
+        return 'Adicionar';
+    }
+
+    public function getTitle(): string {
+        return 'Adicionar Academia';
+    }
+
+    protected function getFormActions(): array {
+        return [
+            Action::make('create')
+                ->label('Adicionar')
+                ->submit('create'),
+            Action::make('clear')
+                ->label('Limpar')
+                ->action(fn() => $this->form->fill([]))
+                ->color('secondary'),
+        ];
     }
 }

@@ -6,14 +6,17 @@ use App\Filament\Resources\AcademiesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListAcademies extends ListRecords
-{
+class ListAcademies extends ListRecords {
     protected static string $resource = AcademiesResource::class;
 
-    protected function getHeaderActions(): array
-    {
+    public function getBreadcrumb(): string {
+        return 'Listar';
+    }
+
+    protected function getHeaderActions(): array {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Adicionar'),
         ];
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->softDeletes();
             $table->string('street');
             $table->string('complement')->nullable();
-            $table->string('cep');
+            $table->string('cep', 8);
             $table->string('number');
             $table->foreignId('academy_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('city_id')->constrained();
