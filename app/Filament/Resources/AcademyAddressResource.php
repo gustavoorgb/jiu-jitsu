@@ -6,6 +6,7 @@ use App\Filament\Resources\AcademyAddressResource\Pages;
 use App\Filament\Resources\AcademyAddressResource\RelationManagers;
 use App\Models\Academies;
 use App\Models\AcademyAddress;
+use App\Models\City;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -21,6 +22,14 @@ class AcademyAddressResource extends Resource {
 
     protected static ?string $navigationIcon = 'heroicon-s-map';
 
+    public static function getSlug(): string {
+        return 'academia-endereco';
+    }
+
+    public static function getLabel(): string {
+        return 'Endereço';
+    }
+
     public static function form(Form $form): Form {
         return $form
             ->schema([
@@ -28,7 +37,14 @@ class AcademyAddressResource extends Resource {
                 TextInput::make('cep')->label('CEP')->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
                 TextInput::make('number')->required()->label('Número')->maxLength(255),
                 TextInput::make('complement')->label('Complemento')->maxLength(255),
-                Select::make('academy.academy')->options(Academies::pluck('name', 'id'))->rules(['required']),
+                Select::make('city_id')->label('Cidade')
+                    ->searchable()
+                    ->getSearchResultsUsing(function ($search) {
+                        return City::where('city', 'like', "%{$search}%")
+                            ->limit(10)->pluck('city', 'id');
+                    })
+                    ->getOptionLabelUsing(fn($value) => City::find($value)->name),
+                Select::make('academy_id')->label('Academia')->options(Academies::pluck('name', 'id'))->rules(['required']),
 
             ]);
     }
@@ -36,14 +52,19 @@ class AcademyAddressResource extends Resource {
     public static function table(Table $table): Table {
         return $table
             ->columns([
+                TextColumn::make('street')->label('Bairro'),
+                TextColumn::make('number')->label('Número'),
+                TextColumn::make('complement')->label('Complemento'),
                 TextColumn::make('cep')->label('CEP')->formatStateUsing(fn($state) => preg_replace('/(\d{5})(\d{3})/', '$1-$2', $state)),
-
+                TextColumn::make('city.city')->label('Cidade'),
+                TextColumn::make('academy.name')->label('Academia'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

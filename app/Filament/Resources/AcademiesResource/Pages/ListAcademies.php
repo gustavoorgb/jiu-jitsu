@@ -9,10 +9,6 @@ use Filament\Resources\Pages\ListRecords;
 class ListAcademies extends ListRecords {
     protected static string $resource = AcademiesResource::class;
 
-    public function getBreadcrumb(): string {
-        return 'Listar';
-    }
-
     protected function getHeaderActions(): array {
         return [
             Actions\CreateAction::make()

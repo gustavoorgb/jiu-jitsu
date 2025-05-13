@@ -24,7 +24,7 @@ class AcademiesResource extends Resource {
     }
 
     public static function getLabel(): string {
-        return 'academias';
+        return 'Academia';
     }
 
     public static function getNavigationBadge(): ?string {
@@ -73,8 +73,6 @@ class AcademiesResource extends Resource {
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }

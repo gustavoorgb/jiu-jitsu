@@ -22,7 +22,7 @@ class AcademyAddress extends Model {
         return $this->belongsTo(Academies::class);
     }
 
-    public function cities() {
+    public function city() {
         return $this->belongsTo(City::class);
     }
 }

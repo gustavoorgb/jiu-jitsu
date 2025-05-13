@@ -9,11 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditAcademyAddress extends EditRecord {
     protected static string $resource = AcademyAddressResource::class;
 
-    protected function getHeaderActions(): array {
-        return [
-            Actions\DeleteAction::make(),
-            Actions\ForceDeleteAction::make(),
-            Actions\RestoreAction::make(),
-        ];
+    protected function getRedirectUrl(): string {
+        return AcademyAddressResource::getUrl('index');
     }
 }

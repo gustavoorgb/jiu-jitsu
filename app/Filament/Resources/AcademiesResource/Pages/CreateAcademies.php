@@ -17,9 +17,9 @@ class CreateAcademies extends CreateRecord {
         return 'Adicionar';
     }
 
-    public function getTitle(): string {
-        return 'Adicionar Academia';
-    }
+    // public function getTitle(): string {
+    //     return 'Adicionar';
+    // }
 
     protected function getFormActions(): array {
         return [
