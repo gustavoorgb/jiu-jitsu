@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class AcademyAddressResource extends Resource {
     protected static ?string $model = AcademyAddress::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-map';
+    protected static ?string $navigationIcon = 'icon-address';
 
     public static function getSlug(): string {
         return 'academia-endereco';

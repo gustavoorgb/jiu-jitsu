@@ -18,10 +18,6 @@ class CreateAcademyAddress extends CreateRecord {
         return 'Adicionar';
     }
 
-    public function getTitle(): string {
-        return 'Adicionar Endereço';
-    }
-
     protected function getFormActions(): array {
         return [
             Action::make('create')

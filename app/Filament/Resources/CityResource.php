@@ -17,7 +17,15 @@ use Illuminate\Database\Eloquent\Builder;
 class CityResource extends Resource {
     protected static ?string $model = City::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-building-office-2';
+    protected static ?string $navigationIcon = 'icon-city';
+
+    public static function getSlug(): string {
+        return 'cidade';
+    }
+
+    public static function getLabel(): string {
+        return 'Cidades';
+    }
 
     public static function form(Form $form): Form {
         return $form
@@ -51,6 +59,7 @@ class CityResource extends Resource {
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->label('Deletar'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
