@@ -17,7 +17,7 @@ class Academies extends Model {
 
 
     public function adresses() {
-        return $this->hasOne(AcademyAddress::class);
+        return $this->hasMany(AcademyAddress::class, 'academy_id');
     }
 
     public function classes() {

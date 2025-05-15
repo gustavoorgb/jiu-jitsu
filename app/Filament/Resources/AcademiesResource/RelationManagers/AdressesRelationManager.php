@@ -1,40 +1,25 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\AcademiesResource\RelationManagers;
 
-use App\Filament\Resources\AcademyAddressResource\Pages;
-use App\Filament\Resources\AcademyAddressResource\RelationManagers;
 use App\Models\Academies;
-use App\Models\AcademyAddress;
 use App\Models\City;
+use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AcademyAddressResource extends Resource {
-    protected static ?string $model = AcademyAddress::class;
+class AdressesRelationManager extends RelationManager {
+    protected static string $relationship = 'adresses';
+    protected static ?string $title = 'Endereços';
 
-    protected static ?string $navigationIcon = 'icon-address';
-
-    public static function getNavigationItems(): array {
-        return [];
-    }
-
-    public static function getSlug(): string {
-        return 'academia-endereco';
-    }
-
-    public static function getLabel(): string {
-        return 'Endereço';
-    }
-
-    public static function form(Form $form): Form {
+    public function form(Form $form): Form {
         return $form
             ->schema([
                 TextInput::make('street')->required()->label('Bairro')->maxLength(255),
@@ -48,13 +33,12 @@ class AcademyAddressResource extends Resource {
                             ->limit(10)->pluck('city', 'id');
                     })
                     ->getOptionLabelUsing(fn($value) => City::find($value)->name),
-                Select::make('academy_id')->label('Academia')->options(Academies::pluck('name', 'id'))->rules(['required']),
-
             ]);
     }
 
-    public static function table(Table $table): Table {
+    public function table(Table $table): Table {
         return $table
+            ->recordTitleAttribute('address')
             ->columns([
                 TextColumn::make('street')->label('Bairro'),
                 TextColumn::make('number')->label('Número'),
@@ -64,7 +48,13 @@ class AcademyAddressResource extends Resource {
                 TextColumn::make('academy.name')->label('Academia'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()
+                    ->label('adicionar')
+                    ->modalHeading('Adicionar')
+                    ->createAnother(false),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -73,28 +63,7 @@ class AcademyAddressResource extends Resource {
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
-    }
-
-    public static function getRelations(): array {
-        return [];
-    }
-
-    public static function getPages(): array {
-        return [
-            'index' => Pages\ListAcademyAddress::route('/'),
-            'create' => Pages\CreateAcademyAddress::route('/adicionar'),
-            'edit' => Pages\EditAcademyAddress::route('/{record}/editar'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
             ]);
     }
 }

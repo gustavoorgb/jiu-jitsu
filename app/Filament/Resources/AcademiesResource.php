@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademiesResource\Pages;
 use App\Filament\Resources\AcademiesResource\RelationManagers;
+use App\Filament\Resources\AcademiesResource\RelationManagers\AdressesRelationManager;
 use App\Models\Academies;
+use App\Models\AcademyAddress;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -60,13 +62,19 @@ class AcademiesResource extends Resource {
                 //
             ])
             ->actions([
+                // Tables\Actions\Action::make('address')
+                //     ->label('Endereços')
+                //     // ->url(fn(Academies $record): string => route("academia.endereco.editar", $record))
+                //     // ->openUrlInNewTab()
+                //     ->icon('heroicon-o-building-office-2')->color('secondary'),
+
                 Tables\Actions\EditAction::make()
                     ->label('Editar'),
 
                 Tables\Actions\DeleteAction::make()->label('Deletar')
                     ->modalHeading('Confirmar exclusão')
                     ->modalDescription('Tem certeza que deseja deletar esta academia? Esta ação não pode ser desfeita.')
-                    ->modalSubmitActionLabel('Sim, deletar')
+                    ->modalSubmitActionLabel('Deletar')
                     ->modalCancelActionLabel('Cancelar'),
 
             ])
@@ -77,11 +85,11 @@ class AcademiesResource extends Resource {
             ]);
     }
 
-    // public static function getRelations(): array {
-    //     return [
-    //         //
-    //     ];
-    // }
+    public static function getRelations(): array {
+        return [
+            AdressesRelationManager::class,
+        ];
+    }
 
     public static function getPages(): array {
         return [

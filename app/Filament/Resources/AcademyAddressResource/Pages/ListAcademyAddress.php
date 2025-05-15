@@ -8,10 +8,4 @@ use Filament\Resources\Pages\ListRecords;
 
 class ListAcademyAddress extends ListRecords {
     protected static string $resource = AcademyAddressResource::class;
-
-    protected function getHeaderActions(): array {
-        return [
-            Actions\CreateAction::make()->label('Adicionar'),
-        ];
-    }
 }
