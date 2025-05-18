@@ -4,9 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademyAddressResource\Pages;
 use App\Filament\Resources\AcademyAddressResource\RelationManagers;
-use App\Models\Academies;
+use App\Models\Academy;
 use App\Models\AcademyAddress;
 use App\Models\City;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -21,6 +23,9 @@ class AcademyAddressResource extends Resource {
     protected static ?string $model = AcademyAddress::class;
 
     protected static ?string $navigationIcon = 'icon-address';
+
+    public ?string $academy = null;
+
 
     public static function getNavigationItems(): array {
         return [];
@@ -34,22 +39,29 @@ class AcademyAddressResource extends Resource {
         return 'Endereço';
     }
 
+    public function mount(string $academy): void {
+        $this->academy = $academy;
+
+        parent::mount();
+    }
+
     public static function form(Form $form): Form {
         return $form
             ->schema([
                 TextInput::make('street')->required()->label('Bairro')->maxLength(255),
-                TextInput::make('cep')->label('CEP')->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
+                TextInput::make('cep')->label('CEP')->required()->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
                 TextInput::make('number')->required()->label('Número')->maxLength(255),
                 TextInput::make('complement')->label('Complemento')->maxLength(255),
-                Select::make('city_id')->label('Cidade')
+                Select::make('city_id')->required()->label('Cidade')
                     ->searchable()
                     ->getSearchResultsUsing(function ($search) {
                         return City::where('city', 'like', "%{$search}%")
                             ->limit(10)->pluck('city', 'id');
                     })
-                    ->getOptionLabelUsing(fn($value) => City::find($value)->name),
-                Select::make('academy_id')->label('Academia')->options(Academies::pluck('name', 'id'))->rules(['required']),
-
+                    ->getOptionLabelUsing(fn($value) => City::find($value)->city),
+                Hidden::make('academy_id')
+                    ->default(fn() => request()->route('academy'))
+                    ->required()
             ]);
     }
 
@@ -86,15 +98,15 @@ class AcademyAddressResource extends Resource {
     public static function getPages(): array {
         return [
             'index' => Pages\ListAcademyAddress::route('/'),
-            'create' => Pages\CreateAcademyAddress::route('/adicionar'),
+            'create' => Pages\CreateAcademyAddress::route('/adicionar/{academy}'),
             'edit' => Pages\EditAcademyAddress::route('/{record}/editar'),
         ];
     }
 
-    public static function getEloquentQuery(): Builder {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
-    }
+    // public static function getEloquentQuery(): Builder {
+    //     return parent::getEloquentQuery()
+    //         ->withoutGlobalScopes([
+    //             SoftDeletingScope::class,
+    //         ]);
+    // }
 }

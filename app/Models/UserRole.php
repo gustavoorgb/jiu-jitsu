@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class UserRole extends Model {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'role_id',
         'user_id',
@@ -24,6 +26,6 @@ class UserRole extends Model {
     }
 
     public function academy() {
-        return $this->belongsTo(Academies::class);
+        return $this->belongsTo(Academy::class);
     }
 }

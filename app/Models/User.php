@@ -61,4 +61,12 @@ class User extends Authenticatable {
     public function owner() {
         return $this->belongsToMany(AcademyOwner::class);
     }
+
+    public function Role() {
+        return $this->hasMany(UserRole::class);
+    }
+
+    public function HasRole($role): bool {
+        return $this->Role === $role;
+    }
 }

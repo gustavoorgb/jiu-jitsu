@@ -19,25 +19,23 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider {
+class StudentPanelProvider extends PanelProvider {
     public function panel(Panel $panel): Panel {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('student')
+            ->path('aluno')
             ->login()
             ->colors([
                 'primary' => Color::hex('#0d6efd'),
                 'secondary' => Color::hex('#6c757d'),
                 'gray' => Color::Slate,
             ])
-            ->sidebarFullyCollapsibleOnDesktop()
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Student/Resources'), for: 'App\\Filament\\Student\\Resources')
+            ->discoverPages(in: app_path('Filament/Student/Pages'), for: 'App\\Filament\\Student\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Student/Widgets'), for: 'App\\Filament\\Student\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -54,6 +52,7 @@ class AdminPanelProvider extends PanelProvider {
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
+                EnsureHasRole::class . ':Aluno',
                 Authenticate::class,
             ]);
     }

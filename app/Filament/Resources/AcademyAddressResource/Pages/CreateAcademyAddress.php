@@ -9,13 +9,19 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateAcademyAddress extends CreateRecord {
     protected static string $resource = AcademyAddressResource::class;
 
+    public string $academy;
 
     protected function getRedirectUrl(): string {
-        return AcademyAddressResource::getUrl('index');
+        return AcademyAddressResource::getUrl("index");
     }
 
     public function getBreadcrumb(): string {
         return 'Adicionar';
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array {
+        $data['academy_id'] = $this->academy;
+        return $data;
     }
 
     protected function getFormActions(): array {

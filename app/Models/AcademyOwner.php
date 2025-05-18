@@ -16,7 +16,7 @@ class academyOwner extends Model {
     ];
 
     public function academy() {
-        return $this->hasOne(Academies::class);
+        return $this->hasOne(Academy::class);
     }
 
     public function owner() {

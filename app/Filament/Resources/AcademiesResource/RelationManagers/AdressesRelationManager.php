@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\AcademiesResource\RelationManagers;
 
-use App\Models\Academies;
+use App\Models\Academy;
 use App\Models\City;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -23,16 +23,16 @@ class AdressesRelationManager extends RelationManager {
         return $form
             ->schema([
                 TextInput::make('street')->required()->label('Bairro')->maxLength(255),
-                TextInput::make('cep')->label('CEP')->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
+                TextInput::make('cep')->required()->label('CEP')->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
                 TextInput::make('number')->required()->label('Número')->maxLength(255),
                 TextInput::make('complement')->label('Complemento')->maxLength(255),
-                Select::make('city_id')->label('Cidade')
+                Select::make('city_id')->required()->label('Cidade')
                     ->searchable()
                     ->getSearchResultsUsing(function ($search) {
                         return City::where('city', 'like', "%{$search}%")
                             ->limit(10)->pluck('city', 'id');
                     })
-                    ->getOptionLabelUsing(fn($value) => City::find($value)->name),
+                    ->getOptionLabelUsing(fn($value) =>  optional(City::find($value))->city),
             ]);
     }
 

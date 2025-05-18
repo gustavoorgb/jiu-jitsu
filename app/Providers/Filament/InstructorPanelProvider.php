@@ -19,25 +19,23 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider {
+class InstructorPanelProvider extends PanelProvider {
     public function panel(Panel $panel): Panel {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('instructor')
+            ->path('instrutor')
             ->login()
             ->colors([
                 'primary' => Color::hex('#0d6efd'),
                 'secondary' => Color::hex('#6c757d'),
                 'gray' => Color::Slate,
             ])
-            ->sidebarFullyCollapsibleOnDesktop()
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Instructor/Resources'), for: 'App\\Filament\\Instructor\\Resources')
+            ->discoverPages(in: app_path('Filament/Instructor/Pages'), for: 'App\\Filament\\Instructor\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Instructor/Widgets'), for: 'App\\Filament\\Instructor\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -55,6 +53,7 @@ class AdminPanelProvider extends PanelProvider {
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureHasRole::class . ':Instrutor',
             ]);
     }
 }

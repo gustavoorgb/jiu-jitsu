@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Academies extends Model {
+class Academy extends Model {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

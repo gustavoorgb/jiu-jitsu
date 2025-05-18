@@ -19,7 +19,7 @@ class AcademyAddress extends Model {
     ];
 
     public function academy() {
-        return $this->belongsTo(Academies::class);
+        return $this->belongsTo(Academy::class);
     }
 
     public function city() {

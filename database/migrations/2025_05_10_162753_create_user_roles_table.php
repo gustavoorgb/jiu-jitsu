@@ -11,9 +11,10 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('user_roles', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('academy_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('role_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('academy_id')->constrained();
+            $table->foreignId('role_id')->constrained();
+            $table->unique(['user_id', 'academy_id']);
         });
     }
 

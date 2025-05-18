@@ -23,7 +23,7 @@ class ClassSession extends Model {
         ];
     }
 
-    public function academies() {
-        return $this->belongsTo(Academies::class);
+    public function Academy() {
+        return $this->belongsTo(Academy::class);
     }
 }
