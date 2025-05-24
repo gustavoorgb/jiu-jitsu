@@ -2,14 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\Roles;
+use App\Enums\RolesEnum;
 use App\Filament\Resources\UserRoleResource\Pages;
 use App\Filament\Resources\UserRoleResource\RelationManagers;
 use App\Models\Academy;
-use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
-use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -45,7 +43,7 @@ class UserRoleResource extends Resource {
                     ->label('Papel na Academia')
                     ->required()
                     ->options(
-                        collect(Roles::cases())
+                        collect(RolesEnum::cases())
                             ->mapWithKeys(fn($role) => [$role->value => $role->label()])
                             ->toArray()
                     ),

@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\Roles;
+use App\Enums\RolesEnum;
 use Closure;
 use Filament\Facades\Filament;
 use Illuminate\Http\Request;
@@ -21,12 +21,11 @@ class EnsureHasRole {
         if (!$user) {
             return redirect(Filament::getLoginUrl());
         }
-
-        if ($user->HasRole($role)) {
+        if ($user->hasRole($role)) {
             return $next($request);
         }
 
-        foreach (Roles::cases() as $role) {
+        foreach (RolesEnum::cases() as $role) {
             if ($user->hasRole($role->value)) {
                 return redirect("/" . strtolower($role->value));
             }

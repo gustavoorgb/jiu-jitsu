@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\Roles;
+use App\Enums\RolesEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model {
@@ -14,7 +14,7 @@ class Role extends Model {
     ];
 
     protected $casts = [
-        'role' => Roles::class,
+        'role' => RolesEnum::class,
     ];
 
     public function userRoles() {

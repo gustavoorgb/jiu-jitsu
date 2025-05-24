@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\BeltsEnum;
+use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -25,7 +27,8 @@ class UserFactory extends Factory {
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber(),
-            'active' => fake(),
+            'is_active' => fake()->randomElements(UserStatusEnum::cases()),
+            'belt' => fake()->randomElement(BeltsEnum::cases()),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),

@@ -9,6 +9,7 @@ use App\Models\Academy;
 use App\Models\AcademyAddress;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -40,17 +41,21 @@ class AcademiesResource extends Resource {
     public static function form(Form $form): Form {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)
-                    ->label('Nome da academia'),
-                Forms\Components\TextInput::make('confederation')
-                    ->maxLength(255)
-                    ->label('Confederação'),
-                Forms\Components\TextInput::make('description')
-                    ->maxLength(255)
-                    ->label('Descrição'),
+                Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->label('Nome da academia'),
 
+                        Forms\Components\TextInput::make('confederation')
+                            ->maxLength(255)
+                            ->label('Confederação'),
+                        Forms\Components\TextInput::make('description')
+                            ->maxLength(255)
+                            ->label('Descrição'),
+
+                    ])
             ]);
     }
 

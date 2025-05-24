@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Academy extends Model {
@@ -24,7 +25,12 @@ class Academy extends Model {
         return $this->hasMany(ClassSession::class);
     }
 
-    public function owner() {
-        return $this->belongsToMany(AcademyOwner::class);
+    public function role(){
+        return $this->hasMany(Role::class, 'academy_id');
+    }
+
+   public function owners(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'academy_owners');
     }
 }

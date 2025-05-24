@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('academies', function (Blueprint $table) {
             $table->id()->autoIncrement();
+            $table->foreignId('parent_academy_id')->nullable()->constrained('academies')->nullOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();
             $table->string('name');
@@ -24,6 +25,10 @@ return new class extends Migration {
      */
     public function down(): void {
         if (!Schema::hasTable('academy_owners')) {
+            Schema::table('academies', function(Blueprint $table){
+                 $table->dropForeign(['parent_academy_id']);
+                 $table->dropColumn('parent_academy_id');
+            });
             Schema::dropIfExists('academies');
         }
     }

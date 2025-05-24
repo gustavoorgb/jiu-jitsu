@@ -4,12 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Enums\UserStatus;
+use App\Enums\BeltsEnum;
+use App\Enums\UserStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 
 class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -24,6 +25,9 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
+        'phone',
+        'belt',
+        'is_active'
     ];
 
     /**
@@ -45,28 +49,20 @@ class User extends Authenticatable {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => UserStatusEnum::class,
+            'belt' => BeltsEnum::class
         ];
     }
 
-    /**
-     * Get the user's initials
-     */
-    public function initials(): string {
-        return Str::of($this->name)
-            ->explode(' ')
-            ->map(fn(string $name) => Str::of($name)->substr(0, 1))
-            ->implode('');
+    public function academies(): BelongsToMany {
+        return $this->belongsToMany(Academy::class, 'academy_owners');
     }
 
-    public function owner() {
-        return $this->belongsToMany(AcademyOwner::class);
+    public function role() {
+        return $this->hasMany(Role::class);
     }
 
-    public function Role() {
-        return $this->hasMany(UserRole::class);
-    }
-
-    public function HasRole($role): bool {
-        return $this->Role === $role;
+    public function hasRole($role): bool {
+        return $this->role === $role;
     }
 }
