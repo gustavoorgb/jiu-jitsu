@@ -11,7 +11,7 @@ enum RolesEnum: int {
         return match ($this) {
             self::ADMIN => 'Administrador',
             self::INSTRUCTOR => 'Instrutor',
-            self::STUDENT => 'Estudante',
+            self::STUDENT => 'Aluno',
         };
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AcademyAddress extends Model {
@@ -18,11 +19,11 @@ class AcademyAddress extends Model {
         'city_id'
     ];
 
-    public function academy() {
+    public function academy(): BelongsTo {
         return $this->belongsTo(Academy::class);
     }
 
-    public function city() {
+    public function city(): BelongsTo {
         return $this->belongsTo(City::class);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\RolesEnum;
 use App\Http\Middleware\EnsureHasRole;
+use App\Http\Middleware\EnsureUserRoleForPanel;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,7 +24,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 class InstructorPanelProvider extends PanelProvider {
     public function panel(Panel $panel): Panel {
         return $panel
-            ->id('instructor')
+            ->id('instrutor')
             ->path('instrutor')
             ->login()
             ->colors([
@@ -53,7 +55,6 @@ class InstructorPanelProvider extends PanelProvider {
             ])
             ->authMiddleware([
                 Authenticate::class,
-                EnsureHasRole::class . ':Instrutor',
             ]);
     }
 }

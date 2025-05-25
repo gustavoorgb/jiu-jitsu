@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\RolesEnum;
 use App\Http\Middleware\EnsureHasRole;
+use App\Http\Middleware\EnsureUserRoleForPanel;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -55,7 +57,6 @@ class AdminPanelProvider extends PanelProvider {
             ])
             ->authMiddleware([
                 Authenticate::class,
-                // EnsureHasRole::class . ':Administrador',
             ]);
     }
 }

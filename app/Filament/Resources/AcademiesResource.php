@@ -3,8 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademiesResource\Pages;
-use App\Filament\Resources\AcademiesResource\RelationManagers;
-use App\Filament\Resources\AcademiesResource\RelationManagers\AdressesRelationManager;
+use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
+use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
+use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
+use Filament\Facades\Filament;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use App\Models\Academy;
 use App\Models\AcademyAddress;
 use Filament\Forms;
@@ -32,6 +37,11 @@ class AcademiesResource extends Resource {
 
     public static function getLabel(): string {
         return 'Academia';
+    }
+
+    public static function getRecordTitle(?Model $record): string|null|Htmlable
+    {
+        return $record->name;
     }
 
     public static function getNavigationBadge(): ?string {
@@ -79,10 +89,7 @@ class AcademiesResource extends Resource {
                     Action::make('enderecos')
                         ->label('Endereços')
                         ->icon('heroicon-o-building-office-2')
-                        ->url(
-                            fn(Academy $record): string =>
-                            route('filament.admin.resources.academia-endereco.create', ['academy' => $record->id])
-                        )
+                        ->url(fn (Academy $record) => static::getUrl('academia-endereco.index', ['parent' => $record->id]))
                         ->color('secondary'),
 
                     DeleteAction::make()->label('Deletar')
@@ -102,17 +109,16 @@ class AcademiesResource extends Resource {
             ]);
     }
 
-    public static function getRelations(): array {
-        return [
-            AdressesRelationManager::class,
-        ];
-    }
-
     public static function getPages(): array {
         return [
             'index' => Pages\ListAcademies::route('/'),
             'create' => Pages\CreateAcademies::route('/adicionar'),
             'edit' => Pages\EditAcademies::route('/{record}/editar'),
+
+             // addresses
+            'academia-endereco.index' => ListAcademyAddress::route('/{parent}/academia-endereco'),
+            'academia-endereco.create' => CreateAcademyAddress::route('/{parent}/academia-endereco/adicionar'),
+            'academia-endereco.edit' => EditAcademyAddress::route('/{parent}/academia-endereco/{record}/editar')
         ];
     }
 }

@@ -5,22 +5,22 @@ namespace App\Filament\Resources\AcademyAddressResource\Pages;
 use App\Filament\Resources\AcademyAddressResource;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Traits\HasParentResource;
 
 class CreateAcademyAddress extends CreateRecord {
+
+    use HasParentResource;
+
     protected static string $resource = AcademyAddressResource::class;
 
-    public string $academy;
-
     protected function getRedirectUrl(): string {
-        return AcademyAddressResource::getUrl("index");
-    }
-
-    public function getBreadcrumb(): string {
-        return 'Adicionar';
+         return $this->previousUrl ?? static::getParentResource()::getUrl('academia-endereco.index', [
+            'parent' => $this->parent,
+        ]);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array {
-        $data['academy_id'] = $this->academy;
+        $data[$this->getParentRelationshipKey()] = $this->parent->id;
         return $data;
     }
 
