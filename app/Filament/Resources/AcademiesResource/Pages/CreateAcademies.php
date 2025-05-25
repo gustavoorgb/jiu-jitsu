@@ -32,4 +32,10 @@ class CreateAcademies extends CreateRecord {
                 ->color('secondary'),
         ];
     }
+
+    protected function mutateFormDataBeforeCreate(array $data): array {
+        $data['parent_academy_id'] = $data['parent_academy_id'] ?? null;
+
+        return $data;
+    }
 }

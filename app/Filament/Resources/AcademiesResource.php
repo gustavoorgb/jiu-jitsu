@@ -3,15 +3,13 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademiesResource\Pages;
+use App\Filament\Resources\AcademiesResource\Pages\ListAcademies;
 use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
-use Filament\Facades\Filament;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Route;
 use App\Models\Academy;
-use App\Models\AcademyAddress;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
@@ -24,7 +22,6 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AcademiesResource extends Resource {
     protected static ?string $model = Academy::class;
@@ -64,13 +61,21 @@ class AcademiesResource extends Resource {
                         Forms\Components\TextInput::make('description')
                             ->maxLength(255)
                             ->label('Descrição'),
-
+                        Forms\Components\Hidden::make('parent_academy_id')
+                            ->default(request('parent_academy_id')),
                     ])
             ]);
     }
 
     public static function table(Table $table): Table {
         return $table
+            ->modifyQueryUsing(function (Builder $query){
+                $parentId = request()->query('parent_academy_id');
+
+              return $query
+                ->when($parentId, fn ($q) => $q->where('parent_academy_id', $parentId))
+                ->when(is_null($parentId), fn ($q) => $q->whereNull('parent_academy_id'));
+            })
             ->columns([
                 TextColumn::make('id')->label('#'),
                 TextColumn::make('name')->searchable()->label('Nome'),
@@ -91,6 +96,13 @@ class AcademiesResource extends Resource {
                         ->icon('heroicon-o-building-office-2')
                         ->url(fn (Academy $record) => static::getUrl('academia-endereco.index', ['parent' => $record->id]))
                         ->color('secondary'),
+
+                    Action::make('ListarFiliais')
+                        ->label('Listar Filiais')
+                        ->icon('heroicon-o-building-office')
+                        ->url(fn (Academy $record) => ListAcademies::getUrl(['parent_academy_id' => $record->id]))
+                        ->color('info')
+                        ->visible(fn (Academy $record) => is_null($record->parent_academy_id)),
 
                     DeleteAction::make()->label('Deletar')
                         ->modalHeading('Confirmar exclusão')
