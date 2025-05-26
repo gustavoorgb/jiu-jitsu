@@ -11,6 +11,8 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,12 +61,20 @@ class User extends Authenticatable implements FilamentUser {
         ];
     }
 
-    public function academies(): BelongsToMany {
-        return $this->belongsToMany(Academy::class, 'academy_owners');
+    // public function academies() {
+    //     return $this->hasManyThrough(Academy::class, UserRole::class, 'user_id', 'id', 'id', 'academy_id');
+    // }
+
+   public function academies(): belongsToMany{
+        return $this->belongsToMany(Academy::class, 'user_roles');
+   }
+
+    public function userRoles(): HasMany{
+        return $this->hasMany(UserRole::class);
     }
 
-    public function roles(): BelongsToMany{
-        return $this->belongsToMany(Role::class, 'user_roles');
+    public function roles(): HasManyThrough {
+        return $this->hasManyThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
     }
 
     public function hasRole(RolesEnum $role): bool {

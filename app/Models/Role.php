@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\RolesEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model {
 
@@ -17,7 +18,7 @@ class Role extends Model {
         'role' => RolesEnum::class,
     ];
 
-    public function userRoles() {
+    public function userRoles(): HasMany {
         return $this->hasMany(UserRole::class);
     }
 

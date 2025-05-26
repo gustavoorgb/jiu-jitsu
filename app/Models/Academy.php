@@ -36,8 +36,8 @@ class Academy extends Model {
         return $this->hasMany(ClassSession::class);
     }
 
-    public function role(){
-        return $this->hasMany(Role::class, 'academy_id');
+    public function userRoles(): HasMany {
+        return $this->hasMany(UserRole::class);
     }
 
    public function owners(): BelongsToMany

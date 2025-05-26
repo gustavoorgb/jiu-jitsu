@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserRole extends Model {
     use HasFactory;
@@ -16,16 +17,15 @@ class UserRole extends Model {
         'academy_id'
     ];
 
-
-    public function role() {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function user() {
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
-    public function academy() {
+    public function academy(): BelongsTo {
         return $this->belongsTo(Academy::class);
+    }
+
+    public function role(): BelongsTo {
+        return $this->belongsTo(Role::class);
     }
 }
