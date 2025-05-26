@@ -7,6 +7,9 @@ use App\Filament\Resources\AcademiesResource\Pages\ListAcademies;
 use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
+use App\Filament\Resources\UserRoleResource\Pages\CreateUserRole;
+use App\Filament\Resources\UserRoleResource\Pages\EditUserRole;
+use App\Filament\Resources\UserRoleResource\Pages\ListUserRoles;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Academy;
@@ -41,9 +44,9 @@ class AcademiesResource extends Resource {
         return $record->name;
     }
 
-    public static function getNavigationBadge(): ?string {
-        return static::getModel()::count() . ' Academias';
-    }
+    // public static function getNavigationBadge(): ?string {
+    //     return static::getModel()::count() . ' Academias';
+    // }
 
     public static function form(Form $form): Form {
         return $form
@@ -97,6 +100,12 @@ class AcademiesResource extends Resource {
                         ->url(fn (Academy $record) => static::getUrl('academia-endereco.index', ['parent' => $record->id]))
                         ->color('secondary'),
 
+                    Action::make('vincular')
+                        ->label('Vincular usúario')
+                        ->icon('heroicon-o-link')
+                        ->url(fn (Academy $record) => static::getUrl('usuario-funcao.index', ['parent' => $record->id]))
+                        ->color('secondary'),
+
                     Action::make('ListarFiliais')
                         ->label('Listar Filiais')
                         ->icon('heroicon-o-building-office')
@@ -127,10 +136,15 @@ class AcademiesResource extends Resource {
             'create' => Pages\CreateAcademies::route('/adicionar'),
             'edit' => Pages\EditAcademies::route('/{record}/editar'),
 
-             // addresses
+             // endereços
             'academia-endereco.index' => ListAcademyAddress::route('/{parent}/academia-endereco'),
             'academia-endereco.create' => CreateAcademyAddress::route('/{parent}/academia-endereco/adicionar'),
-            'academia-endereco.edit' => EditAcademyAddress::route('/{parent}/academia-endereco/{record}/editar')
+            'academia-endereco.edit' => EditAcademyAddress::route('/{parent}/academia-endereco/{record}/editar'),
+
+            //vincular funções a academias
+            'usuario-funcao.index' => ListUserRoles::route('/{parent}/usuario-funcao'),
+            'usuario-funcao.create' => CreateUserRole::route('/{parent}/usuario-funcao/adicionar'),
+            'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar')
         ];
     }
 }

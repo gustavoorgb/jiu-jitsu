@@ -3,9 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademyAddressResource\Pages;
-use App\Filament\Resources\AcademyAddressResource\RelationManagers;
-use App\Filament\Traits\HasParentResource;
-use App\Models\Academy;
 use App\Models\AcademyAddress;
 use App\Models\City;
 use Filament\Forms\Components\Hidden;
@@ -16,7 +13,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,8 +25,7 @@ class AcademyAddressResource extends Resource {
 
      public static string $parentResource = AcademiesResource::class;
 
-    public static function getRecordTitle(?Model $record): string|null|Htmlable
-    {
+    public static function getRecordTitle(?Model $record): string|null|Htmlable{
         return $record?->street ?? 'Endereço';
     }
 

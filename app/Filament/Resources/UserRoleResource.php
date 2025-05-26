@@ -3,9 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Enums\RolesEnum;
-use App\Filament\Resources\UserRoleResource\Pages;
-use App\Filament\Resources\UserRoleResource\RelationManagers;
-use App\Models\Academy;
 use App\Models\User;
 use App\Models\UserRole;
 use Filament\Forms\Components\Select;
@@ -14,16 +11,32 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class UserRoleResource extends Resource {
     protected static ?string $model = UserRole::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = null;
+
+    protected static bool $shouldRegisterNavigation = false;
+
+    public static string $parentResource = AcademiesResource::class;
+
+    public static function getRecordTitle(?Model $record): string|null|Htmlable{
+        return $record->user->name;
+    }
 
     public static function getSlug(): string {
         return 'usuario-funcao';
+    }
+
+    public static function getLabel(): string {
+        return 'Vínculo';
+    }
+
+    public static function getNavigationItems(): array {
+        return [];
     }
 
     public static function form(Form $form): Form {
@@ -34,10 +47,10 @@ class UserRoleResource extends Resource {
                     ->required()
                     ->options(User::pluck('name', 'id')),
 
-                Select::make('academy_id')
-                    ->label('Academia')
-                    ->required()
-                    ->options(Academy::pluck('name', 'id')),
+                // Select::make('academy_id')
+                //     ->label('Academia')
+                //     ->required()
+                //     ->options(Academy::pluck('name', 'id')),
 
                 Select::make('role_id')
                     ->label('Papel na Academia')
@@ -54,7 +67,7 @@ class UserRoleResource extends Resource {
         return $table
             ->columns([
                 TextColumn::make('user.name')->label('Usúario'),
-                TextColumn::make('academy.name')->label('Academia'),
+                // TextColumn::make('academy.name')->label('Academia'),
                 TextColumn::make('role.role_label')->label('Papel')
             ])
             ->filters([
@@ -70,17 +83,17 @@ class UserRoleResource extends Resource {
             ]);
     }
 
-    public static function getRelations(): array {
-        return [
-            //
-        ];
-    }
+    // public static function getRelations(): array {
+    //     return [
+    //         //
+    //     ];
+    // }
 
-    public static function getPages(): array {
-        return [
-            'index' => Pages\ListUserRoles::route('/'),
-            'create' => Pages\CreateUserRole::route('/create'),
-            'edit' => Pages\EditUserRole::route('/{record}/edit'),
-        ];
-    }
+    // public static function getPages(): array {
+    //     return [
+    //         'index' => Pages\ListUserRoles::route('/'),
+    //         'create' => Pages\CreateUserRole::route('/create'),
+    //         'edit' => Pages\EditUserRole::route('/{record}/edit'),
+    //     ];
+    // }
 }
