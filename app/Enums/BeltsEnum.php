@@ -18,4 +18,14 @@ enum BeltsEnum: int {
             self::PRETA => 'Faixa preta',
         };
     }
+
+    public function color(): string {
+        return match ($this) {
+            self::BRANCA => 'text-gray-400',
+            self::AZUL => 'text-blue-500',
+            self::ROXA => 'text-purple-500',
+            self::MARROM => 'text-amber-700',
+            self::PRETA => 'text-black',
+        };
+}
 }

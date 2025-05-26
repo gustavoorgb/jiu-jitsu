@@ -16,10 +16,12 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ClassSessionResource extends Resource {
     protected static ?string $model = ClassSession::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
     public static function getSlug(): string {
         return 'horario-turma';
+    }
+
+    public static function getNavigationItems(): array {
+        return [];
     }
 
     public static function form(Form $form): Form {
