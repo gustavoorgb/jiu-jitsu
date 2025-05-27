@@ -34,6 +34,8 @@ class ClassSessionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
+
             ->columns([
                 //
             ])

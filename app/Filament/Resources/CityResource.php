@@ -50,6 +50,7 @@ class CityResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
             ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50])
             ->columns([

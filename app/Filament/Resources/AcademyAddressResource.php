@@ -16,36 +16,42 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
-class AcademyAddressResource extends Resource {
+class AcademyAddressResource extends Resource
+{
     protected static ?string $model = AcademyAddress::class;
 
     protected static ?string $navigationLabel = null;
 
     protected static bool $shouldRegisterNavigation = false;
 
-     public static string $parentResource = AcademiesResource::class;
+    public static string $parentResource = AcademiesResource::class;
 
-    public static function getRecordTitle(?Model $record): string|null|Htmlable{
+    public static function getRecordTitle(?Model $record): string|null|Htmlable
+    {
         return $record?->street ?? 'Endereço';
     }
 
-    public static function getNavigationItems(): array {
+    public static function getNavigationItems(): array
+    {
         return [];
     }
 
-    public static function getSlug(): string {
+    public static function getSlug(): string
+    {
         return 'academia-endereco';
     }
 
-    public static function getLabel(): string {
+    public static function getLabel(): string
+    {
         return 'Endereço';
     }
 
-    public static function form(Form $form): Form {
+    public static function form(Form $form): Form
+    {
         return $form
             ->schema([
                 TextInput::make('street')->required()->label('Bairro')->maxLength(255),
-                TextInput::make('cep')->label('CEP')->required()->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn($state) => preg_replace('/[^0-9]/', '', $state)),
+                TextInput::make('cep')->label('CEP')->required()->mask('99999-999')->placeholder('00000-000')->maxLength(9)->dehydrateStateUsing(fn ($state) => preg_replace('/[^0-9]/', '', $state)),
                 TextInput::make('number')->required()->label('Número')->maxLength(255),
                 TextInput::make('complement')->label('Complemento')->maxLength(255),
                 Select::make('city_id')->required()->label('Cidade')
@@ -54,20 +60,22 @@ class AcademyAddressResource extends Resource {
                         return City::where('city', 'like', "%{$search}%")
                             ->limit(10)->pluck('city', 'id');
                     })
-                    ->getOptionLabelUsing(fn($value) => City::find($value)->city),
+                    ->getOptionLabelUsing(fn ($value) => City::find($value)->city),
                 Hidden::make('academy_id')
                     ->default(fn ($livewire) => $livewire->parent?->id)
-                    ->required()
+                    ->required(),
             ]);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
+            ->recordUrl(null)
             ->columns([
                 TextColumn::make('street')->label('Bairro'),
                 TextColumn::make('number')->label('Número'),
                 TextColumn::make('complement')->label('Complemento'),
-                TextColumn::make('cep')->label('CEP')->formatStateUsing(fn($state) => preg_replace('/(\d{5})(\d{3})/', '$1-$2', $state)),
+                TextColumn::make('cep')->label('CEP')->formatStateUsing(fn ($state) => preg_replace('/(\d{5})(\d{3})/', '$1-$2', $state)),
                 TextColumn::make('city.city')->label('Cidade'),
                 TextColumn::make('academy.name')->label('Academia'),
             ])
@@ -76,11 +84,11 @@ class AcademyAddressResource extends Resource {
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->url(
-                        fn (Pages\ListAcademyAddress $livewire, Model $record): string => static::$parentResource::getUrl('academia-endereco.edit', [
-                            'record' => $record,
-                            'parent' => $livewire->parent,
-                        ])
-                    ),
+                    fn (Pages\ListAcademyAddress $livewire, Model $record): string => static::$parentResource::getUrl('academia-endereco.edit', [
+                        'record' => $record,
+                        'parent' => $livewire->parent,
+                    ])
+                ),
                 Tables\Actions\DeleteAction::make()->label('Deletar')
                     ->modalHeading('Excluir endereço')
                     ->modalDescription('Tem certeza que deseja excluir este endereço?')
@@ -96,7 +104,8 @@ class AcademyAddressResource extends Resource {
             ]);
     }
 
-    public static function getRelations(): array {
+    public static function getRelations(): array
+    {
         return [];
     }
 

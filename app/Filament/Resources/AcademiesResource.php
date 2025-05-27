@@ -10,12 +10,10 @@ use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
 use App\Filament\Resources\UserRoleResource\Pages\CreateUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\EditUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\ListUserRoles;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Academy;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -24,18 +22,23 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
-class AcademiesResource extends Resource {
+class AcademiesResource extends Resource
+{
     protected static ?string $model = Academy::class;
 
     protected static ?string $navigationIcon = 'icon-martial-arts';
 
-    public static function getSlug(): string {
+    public static function getSlug(): string
+    {
         return 'academias';
     }
 
-    public static function getLabel(): string {
+    public static function getLabel(): string
+    {
         return 'Academia';
     }
 
@@ -48,7 +51,8 @@ class AcademiesResource extends Resource {
     //     return static::getModel()::count() . ' Academias';
     // }
 
-    public static function form(Form $form): Form {
+    public static function form(Form $form): Form
+    {
         return $form
             ->schema([
                 Section::make()
@@ -66,18 +70,20 @@ class AcademiesResource extends Resource {
                             ->label('Descrição'),
                         Forms\Components\Hidden::make('parent_academy_id')
                             ->default(request('parent_academy_id')),
-                    ])
+                    ]),
             ]);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
-            ->modifyQueryUsing(function (Builder $query){
+            ->recordUrl(null)
+            ->modifyQueryUsing(function (Builder $query) {
                 $parentId = request()->query('parent_academy_id');
 
-              return $query
-                ->when($parentId, fn ($q) => $q->where('parent_academy_id', $parentId))
-                ->when(is_null($parentId), fn ($q) => $q->whereNull('parent_academy_id'));
+                return $query
+                    ->when($parentId, fn ($q) => $q->where('parent_academy_id', $parentId))
+                    ->when(is_null($parentId), fn ($q) => $q->whereNull('parent_academy_id'));
             })
             ->columns([
                 TextColumn::make('id')->label('#'),
@@ -120,8 +126,6 @@ class AcademiesResource extends Resource {
                         ->modalCancelActionLabel('Cancelar'),
                 ]),
 
-
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -130,21 +134,22 @@ class AcademiesResource extends Resource {
             ]);
     }
 
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => Pages\ListAcademies::route('/'),
             'create' => Pages\CreateAcademies::route('/adicionar'),
             'edit' => Pages\EditAcademies::route('/{record}/editar'),
 
-             // endereços
+            // endereços
             'academia-endereco.index' => ListAcademyAddress::route('/{parent}/academia-endereco'),
             'academia-endereco.create' => CreateAcademyAddress::route('/{parent}/academia-endereco/adicionar'),
             'academia-endereco.edit' => EditAcademyAddress::route('/{parent}/academia-endereco/{record}/editar'),
 
-            //vincular funções a academias
+            // vincular funções a academias
             'usuario-funcao.index' => ListUserRoles::route('/{parent}/usuario-funcao'),
             'usuario-funcao.create' => CreateUserRole::route('/{parent}/usuario-funcao/adicionar'),
-            'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar')
+            'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar'),
         ];
     }
 }

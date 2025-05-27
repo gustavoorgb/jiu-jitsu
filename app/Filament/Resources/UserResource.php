@@ -101,6 +101,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
             ->columns([
                 TextColumn::make('id')->label('#'),
                 TextColumn::make('name')->searchable()->label('Nome'),
