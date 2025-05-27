@@ -3,35 +3,36 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClassSessionResource\Pages;
-use App\Filament\Resources\ClassSessionResource\RelationManagers;
 use App\Models\ClassSession;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ClassSessionResource extends Resource {
+class ClassSessionResource extends Resource
+{
     protected static ?string $model = ClassSession::class;
 
-    public static function getSlug(): string {
+    public static function getSlug(): string
+    {
         return 'horario-turma';
     }
 
-    public static function getNavigationItems(): array {
+    public static function getNavigationItems(): array
+    {
         return [];
     }
 
-    public static function form(Form $form): Form {
+    public static function form(Form $form): Form
+    {
         return $form
             ->schema([
                 //
             ]);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
             ->columns([
                 //
@@ -49,13 +50,8 @@ class ClassSessionResource extends Resource {
             ]);
     }
 
-    public static function getRelations(): array {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => Pages\ListClassSessions::route('/'),
             'create' => Pages\CreateClassSession::route('/create'),

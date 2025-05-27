@@ -10,14 +10,20 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-     protected function getFormActions(): array {
+    protected function getRedirectUrl(): string
+    {
+        return url('admin/usuario');
+    }
+
+    protected function getFormActions(): array
+    {
         return [
             Action::make('create')
                 ->label('Adicionar')
                 ->submit('create'),
             Action::make('clear')
                 ->label('Limpar')
-                ->action(fn() => $this->form->fill([]))
+                ->action(fn () => $this->form->fill([]))
                 ->color('secondary'),
         ];
     }

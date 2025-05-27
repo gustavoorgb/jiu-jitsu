@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CityResource\Pages;
-use App\Filament\Resources\CityResource\RelationManagers;
 use App\Models\City;
 use App\Models\State;
 use Filament\Forms;
@@ -12,27 +11,31 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
-class CityResource extends Resource {
+class CityResource extends Resource
+{
     protected static ?string $model = City::class;
 
     protected static ?string $navigationIcon = 'icon-city';
 
-    public static function getSlug(): string {
+    public static function getSlug(): string
+    {
         return 'cidade';
     }
 
-    public static function getLabel(): string {
-        return 'Cidades';
+    public static function getLabel(): string
+    {
+        return 'Cidade';
     }
 
-    public static function form(Form $form): Form {
+    public static function form(Form $form): Form
+    {
         return $form
             ->schema([
                 Forms\Components\Select::make('state')
+                    ->label('Estado')
                     ->options(State::pluck('uf', 'id'))
-                    ->rules(['required']),
+                    ->required(),
                 Forms\Components\TextInput::make('city')
                     ->required()
                     ->maxLength(255)
@@ -44,7 +47,8 @@ class CityResource extends Resource {
             ]);
     }
 
-    public static function table(Table $table): Table {
+    public static function table(Table $table): Table
+    {
         return $table
             ->defaultPaginationPageOption(10)
             ->paginationPageOptions([10, 25, 50])
@@ -68,13 +72,8 @@ class CityResource extends Resource {
             ]);
     }
 
-    public static function getRelations(): array {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array {
+    public static function getPages(): array
+    {
         return [
             'index' => Pages\ListCities::route('/listar'),
             'create' => Pages\CreateCity::route('/adicionar'),

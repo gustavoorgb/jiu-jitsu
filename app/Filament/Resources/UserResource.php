@@ -10,9 +10,13 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class UserResource extends Resource
@@ -37,16 +41,60 @@ class UserResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('name')->label('Nome')->required(),
-                        TextInput::make('email')->label('E-Mail')->required()->email(),
-                        TextInput::make('phone')->label('Telefone')->required()->tel(),
-                        TextInput::make('password')->label('Senha')->required()->password()->confirmed(),
-                        TextInput::make('password_confirmation')->label('Confirmar Senha')->required()->password(),
-                        Select::make('belt')->label('Faixa')->required()
+                        TextInput::make('name')
+                            ->label('Nome')
+                            ->required(),
+
+                        TextInput::make('email')
+                            ->label('E-Mail')
+                            ->required()
+                            ->unique(User::class, 'email', ignoreRecord: true)
+                            ->email(),
+
+                        TextInput::make('phone')
+                            ->label('Telefone')
+                            ->required()
+                            ->tel()
+                            ->mask('(99) 99999-9999')
+                            ->stripCharacters(['(', ')', ' ', '-'])
+                            ->dehydrateStateUsing(fn ($state) => is_string($state) ? preg_replace('/\D/', '', $state) : null)
+                            ->afterStateHydrated(function ($state, $component) {
+                                if (strlen($state) === 11) {
+                                    $component->state(
+                                        preg_replace(
+                                            '/(\d{2})(\d{5})(\d{4})/',
+                                            '($1) $2-$3',
+                                            $state),
+                                    );
+                                }
+                            })
+                            ->unique(User::class, 'phone', ignoreRecord: true),
+
+                        TextInput::make('password')
+                            ->label('Senha')
+                            ->required()
+                            ->password()
+                            ->minLength(8)
+                            ->revealable()
+                            ->rule('regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/')
+                            ->helperText('Mínimo 8 caracteres, com letras maiúsculas, minúsculas e números')
+                            ->confirmed(),
+
+                        TextInput::make('password_confirmation')
+                            ->label('Confirmar Senha')
+                            ->required()
+                            ->revealable()
+                            ->minLength(8)
+                            ->password(),
+
+                        Select::make('belt')
+                            ->label('Faixa')
+                            ->required()
                             ->options(collect(BeltsEnum::cases())
-                                ->mapWithKeys(fn($belt) => [$belt->value => $belt->label()])
-                    ),
-                ])
+                                ->mapWithKeys(fn ($belt) => [$belt->value => $belt->label()])
+                            )
+                            ->enum(BeltsEnum::class),
+                    ]),
             ]);
     }
 
@@ -61,34 +109,40 @@ class UserResource extends Resource
                 TextColumn::make('belt')
                     ->label('Faixa')
                     ->badge()
-                    ->formatStateUsing(function ($state){
+                    ->formatStateUsing(function ($state) {
                         $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
                         return $enum->label();
                     })
                     ->icon('icon-belt')
-                    ->iconColor(function($state){
+                    ->iconColor(function ($state) {
                         $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
                         return $enum->color();
                     })
-                    ->Color(function($state){
+                    ->Color(function ($state) {
                         $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
                         return $enum->color();
                     }),
-                TextColumn::make('is_active')->label('Ativo')
-                    ->badge()
-                    ->formatStateUsing(function ($state){
-                        $enum = $state instanceof UserStatusEnum ? $state : UserStatusEnum::tryFrom($state);
-                        return $enum->label();
-                    })
-                    ->color(function ($state){
-                        $enum = $state instanceof UserStatusEnum ? $state : UserStatusEnum::tryFrom($state);
-                        return $enum::ATIVADO ? 'success' : 'danger';
+                ToggleColumn::make('is_active')
+                    ->label('Ativo')
+                    ->onColor('success')
+                    ->offColor('danger')
+                    ->afterStateUpdated(function ($record, $state) {
+                        Notification::make()
+                            ->title('Situação de ativo atualizada com sucesso!')
+                            ->success()
+                            ->send();
                     }),
 
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('is_active')
+                    ->label('Ativo')
+                    ->options(UserStatusEnum::class)
+                    ->attribute('is_active'),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
