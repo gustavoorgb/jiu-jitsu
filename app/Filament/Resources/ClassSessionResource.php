@@ -35,7 +35,6 @@ class ClassSessionResource extends Resource
     {
         return $table
             ->recordUrl(null)
-
             ->columns([
                 //
             ])
