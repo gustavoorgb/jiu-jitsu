@@ -3,19 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClassSchedulesResource\Pages;
-use App\Filament\Resources\ClassSchedulesResource\RelationManagers;
-use App\Models\ClassSchedules;
-use Filament\Forms;
+use App\Models\ClassSchedule;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ClassSchedulesResource extends Resource
 {
-    protected static ?string $model = ClassSchedules::class;
+    protected static ?string $model = ClassSchedule::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
