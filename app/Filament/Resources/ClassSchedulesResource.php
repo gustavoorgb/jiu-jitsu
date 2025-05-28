@@ -2,26 +2,22 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ClassSessionResource\Pages;
-use App\Models\ClassSession;
+use App\Filament\Resources\ClassSchedulesResource\Pages;
+use App\Filament\Resources\ClassSchedulesResource\RelationManagers;
+use App\Models\ClassSchedules;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ClassSessionResource extends Resource
+class ClassSchedulesResource extends Resource
 {
-    protected static ?string $model = ClassSession::class;
+    protected static ?string $model = ClassSchedules::class;
 
-    public static function getSlug(): string
-    {
-        return 'horario-turma';
-    }
-
-    public static function getNavigationItems(): array
-    {
-        return [];
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -34,7 +30,6 @@ class ClassSessionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordUrl(null)
             ->columns([
                 //
             ])
@@ -51,12 +46,19 @@ class ClassSessionResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClassSessions::route('/'),
-            'create' => Pages\CreateClassSession::route('/create'),
-            'edit' => Pages\EditClassSession::route('/{record}/edit'),
+            'index' => Pages\ListClassSchedules::route('/'),
+            'create' => Pages\CreateClassSchedules::route('/create'),
+            'edit' => Pages\EditClassSchedules::route('/{record}/edit'),
         ];
     }
 }

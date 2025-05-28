@@ -7,6 +7,9 @@ use App\Filament\Resources\AcademiesResource\Pages\ListAcademies;
 use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
+use App\Filament\Resources\ClassSchedulesResource\Pages\CreateClassSchedules;
+use App\Filament\Resources\ClassSchedulesResource\Pages\EditClassSchedules;
+use App\Filament\Resources\ClassSchedulesResource\Pages\ListClassSchedules;
 use App\Filament\Resources\UserRoleResource\Pages\CreateUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\EditUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\ListUserRoles;
@@ -150,6 +153,11 @@ class AcademiesResource extends Resource
             'usuario-funcao.index' => ListUserRoles::route('/{parent}/usuario-funcao'),
             'usuario-funcao.create' => CreateUserRole::route('/{parent}/usuario-funcao/adicionar'),
             'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar'),
+
+            // sessões de aulas
+            'horario-aula.index' => ListClassSchedules::route('/{parent}/horario-aula'),
+            'horario-aula.create' => CreateClassSchedules::route('/{parent}/horario-aula/adicionar'),
+            'horario-aula.edit' => EditClassSchedules::route('/{parent}/horario-aula/{record}/editar'),
         ];
     }
 }
