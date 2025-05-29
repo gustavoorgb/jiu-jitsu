@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\DayOfWeekEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ClassSchedule extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
 
     protected $fillable = [
         'day_of_week',
@@ -22,8 +22,12 @@ class ClassSchedule extends Model
     protected function casts()
     {
         return [
-            // 'date' => 'date',
-            // 'time' => 'time',
+            'day_of_week' => DayOfWeekEnum::class,
         ];
+    }
+
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(JiuJitsuClass::class);
     }
 }

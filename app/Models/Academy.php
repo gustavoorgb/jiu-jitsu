@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Academy extends Model {
+class Academy extends Model
+{
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
@@ -20,28 +21,34 @@ class Academy extends Model {
         'parent_academy_id',
     ];
 
-    public function parent(): BelongsTo{
+    public function parent(): BelongsTo
+    {
         return $this->belongsTo(Academy::class, 'parent_academy_id');
     }
 
-    public function children(): HasMany{
+    public function children(): HasMany
+    {
         return $this->hasMany(Academy::class, 'parent_academy_id');
     }
 
-    public function address(): HasOne {
+    public function address(): HasOne
+    {
+
         return $this->hasOne(AcademyAddress::class, 'academy_id');
     }
 
-    public function classes() {
-        return $this->hasMany(ClassSession::class);
+    public function classes(): HasMany
+    {
+        return $this->hasMany(JiuJitsuClass::class);
     }
 
-    public function userRoles(): HasMany {
+    public function userRoles(): HasMany
+    {
         return $this->hasMany(UserRole::class);
     }
 
-   public function owners(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'academy_owners');
-    }
+    // public function owners(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(User::class, 'academy_owners');
+    // }
 }
