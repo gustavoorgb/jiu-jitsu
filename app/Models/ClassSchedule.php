@@ -16,7 +16,7 @@ class ClassSchedule extends Model
         'start_time',
         'end_time',
         'academy_id',
-        'class_id',
+        'lesson_id',
     ];
 
     protected function casts()
@@ -26,8 +26,8 @@ class ClassSchedule extends Model
         ];
     }
 
-    public function class(): BelongsTo
+    public function lesson(): BelongsTo
     {
-        return $this->belongsTo(JiuJitsuClass::class);
+        return $this->belongsTo(Lesson::class);
     }
 }

@@ -8,11 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class JiuJitsuClass extends Model
+class Lesson extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $table = 'classes';
 
     protected $fillable = [
         'name',
@@ -35,6 +33,6 @@ class JiuJitsuClass extends Model
 
     public function schedules(): HasMany
     {
-        return $this->hasMany(ClassSchedule::class, 'class_id');
+        return $this->hasMany(ClassSchedule::class);
     }
 }

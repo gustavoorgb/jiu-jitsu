@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\AcademyAddressResource\Pages;
+namespace App\Filament\Resources\JiuJitsuClassResource\Pages;
 
-use App\Filament\Resources\AcademyAddressResource;
+use App\Filament\Resources\LessonResource;
 use App\Filament\Traits\HasParentResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditAcademyAddress extends EditRecord
+class EditLesson extends EditRecord
 {
     use HasParentResource;
 
-    protected static string $resource = AcademyAddressResource::class;
+    protected static string $resource = LessonResource::class;
 
     protected function getRedirectUrl(): string
     {
-        return $this->previousUrl ?? static::getParentResource()::getUrl('academia-endereco.index', [
+        return $this->previousUrl ?? static::getParentResource()::getUrl('aula.index', [
             'parent' => $this->parent,
         ]);
     }
@@ -25,7 +25,7 @@ class EditAcademyAddress extends EditRecord
         $resource = static::getResource();
 
         $action->authorize($resource::canDelete($this->getRecord()))
-            ->successRedirectUrl(static::getParentResource()::getUrl('academia-endereco.index', [
+            ->successRedirectUrl(static::getParentResource()::getUrl('aula.index', [
                 'parent' => $this->parent,
             ]));
     }

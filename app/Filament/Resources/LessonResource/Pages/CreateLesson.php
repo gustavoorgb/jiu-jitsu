@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\ClassSchedulesResource\Pages;
+namespace App\Filament\Resources\JiuJitsuClassResource\Pages;
 
-use App\Filament\Resources\ClassSchedulesResource;
+use App\Filament\Resources\LessonResource;
 use App\Filament\Traits\HasParentResource;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateClassSchedules extends CreateRecord
+class CreateLesson extends CreateRecord
 {
     use HasParentResource;
 
-    protected static string $resource = ClassSchedulesResource::class;
+    protected static string $resource = LessonResource::class;
 
     protected function getRedirectUrl(): string
     {
-        return $this->previousUrl ?? static::getParentResource()::getUrl('aula-horario.index', [
+        return $this->previousUrl ?? static::getParentResource()::getUrl('aula.index', [
             'parent' => $this->parent,
         ]);
     }

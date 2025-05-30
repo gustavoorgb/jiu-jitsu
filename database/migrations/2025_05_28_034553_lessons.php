@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classes', function (Blueprint $table) {
+        Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->foreignId('academy_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->text('description');
-            $table->tinyInteger('min_belt', unsigned: true)->nullable(true);
+            $table->text('description')->nullable();
+            $table->tinyInteger('min_belt', unsigned: true);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,7 +28,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classes');
+        Schema::dropIfExists('lessons');
 
     }
 };

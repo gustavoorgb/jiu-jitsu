@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('class_users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->boolean('is_instructor')->default(0);
             $table->unique(['class_id', 'user_id']);
         });

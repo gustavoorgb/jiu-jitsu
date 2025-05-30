@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('academy_id')->constrained()->onDelete('cascade');
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->tinyInteger('day_of_week');
             $table->time('start_time');
             $table->time('end_time');

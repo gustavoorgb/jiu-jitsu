@@ -108,16 +108,4 @@ class AcademyAddressResource extends Resource
     {
         return [];
     }
-
-    // public static function getPages(): array {
-    //     return [
-    //         'index' => Pages\ListAcademyAddress::route('/{academy}'),
-    //         'create' => Pages\CreateAcademyAddress::route('/adicionar/{academy}'),
-    //         'edit' => Pages\EditAcademyAddress::route('/{academy}/editar'),
-    //     ];
-    // }
-
-    // public static function getEloquentQuery(): Builder {
-    //    return parent::getEloquentQuery()->where('academy_id', request('academy'));
-    // }
 }

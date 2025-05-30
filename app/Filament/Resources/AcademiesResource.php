@@ -7,9 +7,9 @@ use App\Filament\Resources\AcademiesResource\Pages\ListAcademies;
 use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
 use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
-use App\Filament\Resources\ClassSchedulesResource\Pages\CreateClassSchedules;
-use App\Filament\Resources\ClassSchedulesResource\Pages\EditClassSchedules;
-use App\Filament\Resources\ClassSchedulesResource\Pages\ListClassSchedules;
+use App\Filament\Resources\JiuJitsuClassResource\Pages\CreateLesson;
+use App\Filament\Resources\JiuJitsuClassResource\Pages\EditLesson;
+use App\Filament\Resources\JiuJitsuClassResource\Pages\ListLesson;
 use App\Filament\Resources\UserRoleResource\Pages\CreateUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\EditUserRole;
 use App\Filament\Resources\UserRoleResource\Pages\ListUserRoles;
@@ -49,10 +49,6 @@ class AcademiesResource extends Resource
     {
         return $record->name;
     }
-
-    // public static function getNavigationBadge(): ?string {
-    //     return static::getModel()::count() . ' Academias';
-    // }
 
     public static function form(Form $form): Form
     {
@@ -109,6 +105,12 @@ class AcademiesResource extends Resource
                         ->url(fn (Academy $record) => static::getUrl('academia-endereco.index', ['parent' => $record->id]))
                         ->color('secondary'),
 
+                    Action::make('aulas')
+                        ->label('Aulas')
+                        ->icon('heroicon-o-academic-cap')
+                        ->url(fn (Academy $record) => static::getUrl('aula.index', ['parent' => $record->id]))
+                        ->color('primary'),
+
                     Action::make('vincular')
                         ->label('Vincular usúario')
                         ->icon('heroicon-o-link')
@@ -154,10 +156,10 @@ class AcademiesResource extends Resource
             'usuario-funcao.create' => CreateUserRole::route('/{parent}/usuario-funcao/adicionar'),
             'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar'),
 
-            // sessões de aulas
-            'horario-aula.index' => ListClassSchedules::route('/{parent}/horario-aula'),
-            'horario-aula.create' => CreateClassSchedules::route('/{parent}/horario-aula/adicionar'),
-            'horario-aula.edit' => EditClassSchedules::route('/{parent}/horario-aula/{record}/editar'),
+            // aulas
+            'aula.index' => ListLesson::route('/{parent}/aula'),
+            'aula.create' => CreateLesson::route('/{parent}/aula/adicionar'),
+            'aula.edit' => EditLesson::route('/{parent}/aula/{record}/editar'),
         ];
     }
 }

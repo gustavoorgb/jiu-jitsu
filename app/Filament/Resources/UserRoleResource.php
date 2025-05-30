@@ -75,7 +75,8 @@ class UserRoleResource extends Resource
                     ->options(
                         collect(RolesEnum::cases())
                             ->mapWithKeys(fn ($role) => [$role->value => $role->label()])
-                            ->toArray()),
+                            ->toArray())
+                    ->enum(RolesEnum::class),
 
                 Hidden::make('academy_id')
                     ->default(fn ($livewire) => $livewire->parent?->id)

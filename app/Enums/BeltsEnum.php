@@ -4,6 +4,7 @@ namespace App\Enums;
 
 enum BeltsEnum: int
 {
+    case NENHUM = 0;
     case BRANCA = 1;
     case AZUL = 2;
     case ROXA = 3;
@@ -13,6 +14,7 @@ enum BeltsEnum: int
     public function label(): string
     {
         return match ($this) {
+            self::NENHUM => 'Sem faixa',
             self::BRANCA => 'Faixa branca',
             self::AZUL => 'Faixa azul',
             self::ROXA => 'Faixa roxa',
