@@ -15,11 +15,14 @@ class ListLesson extends ListRecords
 
     protected function getHeaderActions(): array
     {
+
         return [
             CreateAction::make()
                 ->label('Adicionar')
                 ->url(fn (): string => static::getParentResource()::getUrl('aula.create',
-                    ['parent' => $this->parent]), ),
+                    ['parent' => $this->parent])
+                ),
+
         ];
     }
 }

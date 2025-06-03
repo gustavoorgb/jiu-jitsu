@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,9 +36,9 @@ class Academy extends Model
         return $this->hasOne(AcademyAddress::class, 'academy_id');
     }
 
-    public function classes(): HasMany
+    public function lessons(): HasMany
     {
-        return $this->hasMany(JiuJitsuClass::class);
+        return $this->hasMany(Lesson::class);
     }
 
     public function userRoles(): HasMany

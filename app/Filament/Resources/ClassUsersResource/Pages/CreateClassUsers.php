@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Filament\Resources\JiuJitsuClassResource\Pages;
+namespace App\Filament\Resources\ClassUserResource\Pages;
 
-use App\Filament\Resources\LessonResource;
+use App\Filament\Resources\ClassUsersResource;
 use App\Filament\Traits\HasParentResource;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
-class CreateLesson extends CreateRecord
+class CreateClassUser extends CreateRecord
 {
     use HasParentResource;
 
-    protected static string $resource = LessonResource::class;
+    protected static string $resource = ClassUsersResource::class;
 
     protected function getRedirectUrl(): string
     {
-        return ListLesson::getUrl([
-            'parent' => $this->parent->id,
+        return $this->previousUrl ?? static::getParentResource()::getUrl('aula-aluno.index', [
+            'parent' => $this->parent,
         ]);
     }
 

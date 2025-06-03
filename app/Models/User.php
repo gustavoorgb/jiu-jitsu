@@ -8,6 +8,7 @@ use App\Enums\BeltsEnum;
 use App\Enums\RolesEnum;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -82,6 +83,23 @@ class User extends Authenticatable implements FilamentUser
     public function hasRole(RolesEnum $role): bool
     {
         return $this->roles->contains('role', $role);
+    }
+
+    public function lessons(): BelongsToMany
+    {
+        return $this->belongsToMany(Lesson::class, 'class_users', 'user_id', 'lesson_id')
+            ->withPivot('is_instructor')
+            ->using(ClassUser::class);
+
+    }
+
+    public static function getUsersStudents(): Collection
+    {
+        return self::whereHas('roles', function ($query) {
+            $query->where('role', '!=', RolesEnum::ADMIN->value);
+        })
+            ->get();
+
     }
 
     public function canAccessPanel(Panel $panel): bool

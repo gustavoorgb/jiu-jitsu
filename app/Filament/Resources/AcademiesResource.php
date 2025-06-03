@@ -47,7 +47,7 @@ class AcademiesResource extends Resource
 
     public static function getRecordTitle(?Model $record): string|null|Htmlable
     {
-        return $record->name;
+        return $record?->name;
     }
 
     public static function form(Form $form): Form
@@ -108,7 +108,7 @@ class AcademiesResource extends Resource
                     Action::make('aulas')
                         ->label('Aulas')
                         ->icon('heroicon-o-academic-cap')
-                        ->url(fn (Academy $record) => static::getUrl('aula.index', ['parent' => $record->id]))
+                        ->url(fn (Academy $record) => ListLesson::getUrl(['parent' => $record->id]))
                         ->color('primary'),
 
                     Action::make('vincular')

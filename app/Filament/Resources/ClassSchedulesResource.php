@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\DayOfWeekEnum;
+use App\Filament\Traits\HasParentResource;
 use App\Models\ClassSchedule;
 use App\Models\Lesson;
 use Filament\Forms\Components\Hidden;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ClassSchedulesResource extends Resource
 {
+    use HasParentResource;
+
     protected static ?string $model = ClassSchedule::class;
 
     protected static ?string $navigationLabel = null;
@@ -46,6 +49,16 @@ class ClassSchedulesResource extends Resource
         return 'Horário';
     }
 
+    // public static function getBreadcrumb(): string
+    // {
+    //     $lessonId = static::$parent->id;
+    //     $academyId = Lesson::find($lessonId)?->academy_id;
+
+    //     return route('filament.admin.resources.aula.index', [
+    //         'parent' => $academyId,
+    //     ]);
+    // }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -69,7 +82,16 @@ class ClassSchedulesResource extends Resource
                         TimePicker::make('start_time')
                             ->label('Início')
                             ->required()
-                            ->locale('pt')
+                            ->datalist([
+                                '09:00',
+                                '09:30',
+                                '10:00',
+                                '10:30',
+                                '11:00',
+                                '11:30',
+                                '12:00',
+                            ])
+                            ->locale('pt_BR')
                             ->seconds(false)
                             ->format('H:i')
                             ->displayFormat('H:i')
@@ -78,7 +100,16 @@ class ClassSchedulesResource extends Resource
                         TimePicker::make('end_time')
                             ->label('Término')
                             ->required()
-                            ->locale('pt')
+                            ->datalist([
+                                '09:00',
+                                '09:30',
+                                '10:00',
+                                '10:30',
+                                '11:00',
+                                '11:30',
+                                '12:00',
+                            ])
+                            ->locale('pt_BR')
                             ->seconds(false)
                             ->format('H:i')
                             ->displayFormat('H:i')
@@ -98,16 +129,18 @@ class ClassSchedulesResource extends Resource
                         $enum = $state instanceof DayOfWeekEnum ? $state : DayOfWeekEnum::tryFrom($state);
 
                         return $enum->label();
-                    })
-                    ->searchable(),
+                    }),
 
                 Tables\Columns\TextColumn::make('start_time')
                     ->label('Início')
-                    ->dateTime('H:i'),
+                    ->dateTime('H:i')
+                    ->timezone('America/Sao_Paulo'),
 
                 Tables\Columns\TextColumn::make('end_time')
                     ->label('Término')
-                    ->dateTime('H:i'),
+                    ->dateTime('H:i')
+                    ->timezone('America/Sao_Paulo'),
+
             ])
             ->filters([
                 //

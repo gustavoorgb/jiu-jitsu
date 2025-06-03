@@ -7,4 +7,6 @@ return [
     ],
     'unique' => 'O campo :attribute já está em uso.',
 
+    'regex' => 'O formato de :attribute é inválido!',
+
 ];
