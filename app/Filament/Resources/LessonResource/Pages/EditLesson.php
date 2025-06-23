@@ -1,32 +1,28 @@
 <?php
 
-namespace App\Filament\Resources\JiuJitsuClassResource\Pages;
+namespace App\Filament\Resources\LessonResource\Pages;
 
+use App\Filament\Resources\AcademiesResource;
 use App\Filament\Resources\LessonResource;
-use App\Filament\Traits\HasParentResource;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditLesson extends EditRecord
 {
-    use HasParentResource;
-
     protected static string $resource = LessonResource::class;
 
-    protected function getRedirectUrl(): string
+    public function hasCombinedRelationManagerTabsWithContent(): bool
     {
-        return $this->previousUrl ?? static::getParentResource()::getUrl('aula.index', [
-            'parent' => $this->parent,
-        ]);
+        return true;
     }
 
-    protected function configureDeleteAction(Actions\DeleteAction $action): void
+    public function getBreadcrumbs(): array
     {
-        $resource = static::getResource();
+        $academy = $this->record->academy;
 
-        $action->authorize($resource::canDelete($this->getRecord()))
-            ->successRedirectUrl(static::getParentResource()::getUrl('aula.index', [
-                'parent' => $this->parent,
-            ]));
+        return [
+            AcademiesResource::getUrl() => 'Academias',
+            AcademiesResource::getUrl('edit', ['record' => $academy->id]).'?activeRelationManager=1' => 'Aula',
+            'Editar',
+        ];
     }
 }

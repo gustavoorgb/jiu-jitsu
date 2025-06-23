@@ -6,6 +6,7 @@ use App\Enums\DayOfWeekEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ClassSchedule extends Model
 {
@@ -29,5 +30,15 @@ class ClassSchedule extends Model
     public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(ClassAttendance::class, 'class_schedule_id');
+    }
+
+    public function formatDay()
+    {
+        return $this->day_of_week->label();
     }
 }

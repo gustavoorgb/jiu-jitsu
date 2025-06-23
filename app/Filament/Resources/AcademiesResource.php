@@ -3,23 +3,16 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcademiesResource\Pages;
-use App\Filament\Resources\AcademiesResource\Pages\ListAcademies;
-use App\Filament\Resources\AcademyAddressResource\Pages\CreateAcademyAddress;
-use App\Filament\Resources\AcademyAddressResource\Pages\EditAcademyAddress;
-use App\Filament\Resources\AcademyAddressResource\Pages\ListAcademyAddress;
-use App\Filament\Resources\JiuJitsuClassResource\Pages\CreateLesson;
-use App\Filament\Resources\JiuJitsuClassResource\Pages\EditLesson;
-use App\Filament\Resources\JiuJitsuClassResource\Pages\ListLesson;
-use App\Filament\Resources\UserRoleResource\Pages\CreateUserRole;
-use App\Filament\Resources\UserRoleResource\Pages\EditUserRole;
-use App\Filament\Resources\UserRoleResource\Pages\ListUserRoles;
+use App\Filament\Resources\AcademiesResource\RelationManagers\AcademyAdressesRelationManager;
+use App\Filament\Resources\AcademiesResource\RelationManagers\BranchesRelationManager;
+use App\Filament\Resources\AcademiesResource\RelationManagers\LessonRelationManager;
+use App\Filament\Resources\AcademiesResource\RelationManagers\UserRolesRelationManager;
 use App\Models\Academy;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -85,7 +78,6 @@ class AcademiesResource extends Resource
                     ->when(is_null($parentId), fn ($q) => $q->whereNull('parent_academy_id'));
             })
             ->columns([
-                TextColumn::make('id')->label('#'),
                 TextColumn::make('name')->searchable()->label('Nome'),
                 TextColumn::make('confederation')->searchable()->label('Confederação'),
                 TextColumn::make('description')->searchable()->label('Descrição'),
@@ -98,31 +90,7 @@ class AcademiesResource extends Resource
                 ActionGroup::make([
                     EditAction::make()
                         ->label('Editar'),
-
-                    Action::make('enderecos')
-                        ->label('Endereços')
-                        ->icon('heroicon-o-building-office-2')
-                        ->url(fn (Academy $record) => static::getUrl('academia-endereco.index', ['parent' => $record->id]))
-                        ->color('secondary'),
-
-                    Action::make('aulas')
-                        ->label('Aulas')
-                        ->icon('heroicon-o-academic-cap')
-                        ->url(fn (Academy $record) => ListLesson::getUrl(['parent' => $record->id]))
-                        ->color('primary'),
-
-                    Action::make('vincular')
-                        ->label('Vincular usúario')
-                        ->icon('heroicon-o-link')
-                        ->url(fn (Academy $record) => static::getUrl('usuario-funcao.index', ['parent' => $record->id]))
-                        ->color('secondary'),
-
-                    Action::make('ListarFiliais')
-                        ->label('Listar Filiais')
-                        ->icon('heroicon-o-building-office')
-                        ->url(fn (Academy $record) => ListAcademies::getUrl(['parent_academy_id' => $record->id]))
-                        ->color('info')
-                        ->visible(fn (Academy $record) => is_null($record->parent_academy_id)),
+                    Tables\Actions\ViewAction::make(),
 
                     DeleteAction::make()->label('Deletar')
                         ->modalHeading('Confirmar exclusão')
@@ -137,6 +105,27 @@ class AcademiesResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            AcademyAdressesRelationManager::class,
+            LessonRelationManager::class,
+            UserRolesRelationManager::class,
+            BranchesRelationManager::class,
+        ];
+    }
+
+    protected function getAllRelationManagers(): array
+    {
+        return [
+            AcademyAdressesRelationManager::class,
+            LessonRelationManager::class,
+            UserRolesRelationManager::class,
+            BranchesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
@@ -144,22 +133,8 @@ class AcademiesResource extends Resource
         return [
             'index' => Pages\ListAcademies::route('/'),
             'create' => Pages\CreateAcademies::route('/adicionar'),
+            'view' => Pages\ViewAcademy::route('/{record}'),
             'edit' => Pages\EditAcademies::route('/{record}/editar'),
-
-            // endereços
-            'academia-endereco.index' => ListAcademyAddress::route('/{parent}/academia-endereco'),
-            'academia-endereco.create' => CreateAcademyAddress::route('/{parent}/academia-endereco/adicionar'),
-            'academia-endereco.edit' => EditAcademyAddress::route('/{parent}/academia-endereco/{record}/editar'),
-
-            // vincular funções a academias
-            'usuario-funcao.index' => ListUserRoles::route('/{parent}/usuario-funcao'),
-            'usuario-funcao.create' => CreateUserRole::route('/{parent}/usuario-funcao/adicionar'),
-            'usuario-funcao.edit' => EditUserRole::route('/{parent}/usuario-funcao/{record}/editar'),
-
-            // aulas
-            'aula.index' => ListLesson::route('/{parent}/aula'),
-            'aula.create' => CreateLesson::route('/{parent}/aula/adicionar'),
-            'aula.edit' => EditLesson::route('/{parent}/aula/{record}/editar'),
         ];
     }
 }

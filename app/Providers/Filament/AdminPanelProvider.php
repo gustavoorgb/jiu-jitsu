@@ -24,6 +24,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->id('admin')
             ->path('admin')
             ->login()

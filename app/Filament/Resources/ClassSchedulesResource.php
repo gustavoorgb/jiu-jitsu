@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Enums\DayOfWeekEnum;
-use App\Filament\Traits\HasParentResource;
 use App\Models\ClassSchedule;
 use App\Models\Lesson;
 use Filament\Forms\Components\Hidden;
@@ -14,25 +13,14 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
 
 class ClassSchedulesResource extends Resource
 {
-    use HasParentResource;
-
     protected static ?string $model = ClassSchedule::class;
 
     protected static ?string $navigationLabel = null;
 
     protected static bool $shouldRegisterNavigation = false;
-
-    public static string $parentResource = LessonResource::class;
-
-    public static function getRecordTitle(?Model $record): string|null|Htmlable
-    {
-        return $record?->name ?? 'Horário';
-    }
 
     public static function getNavigationItems(): array
     {
@@ -48,16 +36,6 @@ class ClassSchedulesResource extends Resource
     {
         return 'Horário';
     }
-
-    // public static function getBreadcrumb(): string
-    // {
-    //     $lessonId = static::$parent->id;
-    //     $academyId = Lesson::find($lessonId)?->academy_id;
-
-    //     return route('filament.admin.resources.aula.index', [
-    //         'parent' => $academyId,
-    //     ]);
-    // }
 
     public static function form(Form $form): Form
     {

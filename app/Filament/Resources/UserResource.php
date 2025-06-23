@@ -10,9 +10,12 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -145,12 +148,43 @@ class UserResource extends Resource
                     ->attribute('is_active'),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('name')->label('Nome'),
+                TextEntry::make('email')->label('E-mail'),
+                TextEntry::make('phone')->label('Telefone'),
+                TextEntry::make('belt')->label('Faixa')
+                    ->badge()
+                    ->formatStateUsing(function ($state) {
+                        $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
+                        return $enum->label();
+                    })
+                    ->icon('icon-belt')
+                    ->iconColor(function ($state) {
+                        $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
+                        return $enum->color();
+                    })
+                    ->Color(function ($state) {
+                        $enum = $state instanceof BeltsEnum ? $state : BeltsEnum::tryFrom($state);
+
+                        return $enum->color();
+                    }),
             ]);
     }
 
@@ -165,6 +199,7 @@ class UserResource extends Resource
     {
         return [
             'index' => Pages\ListUsers::route('/'),
+            // 'view' => Pages\ViewUser::route('/{record}'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];

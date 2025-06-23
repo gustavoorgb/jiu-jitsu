@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('class_attendance', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')
+            $table->foreignId('class_user_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->foreignId('class_schedule_id')
@@ -22,7 +22,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->date('attendance_date');
             $table->timestamps();
-            $table->unique(['user_id', 'class_schedule_id', 'attendance_date'], 'unique_attendance_per_session');
+            $table->unique(['class_user_id', 'class_schedule_id', 'attendance_date'], 'unique_attendance_per_session');
         });
     }
 

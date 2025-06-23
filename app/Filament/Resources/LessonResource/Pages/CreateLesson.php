@@ -1,31 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\JiuJitsuClassResource\Pages;
+namespace App\Filament\Resources\LessonResource\Pages;
 
+use App\Filament\Resources\AcademiesResource;
 use App\Filament\Resources\LessonResource;
-use App\Filament\Traits\HasParentResource;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateLesson extends CreateRecord
 {
-    use HasParentResource;
-
     protected static string $resource = LessonResource::class;
-
-    protected function getRedirectUrl(): string
-    {
-        return ListLesson::getUrl([
-            'parent' => $this->parent->id,
-        ]);
-    }
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data[$this->getParentRelationshipKey()] = $this->parent->id;
-
-        return $data;
-    }
 
     protected function getFormActions(): array
     {
@@ -38,5 +22,10 @@ class CreateLesson extends CreateRecord
                 ->action(fn () => $this->form->fill([]))
                 ->color('secondary'),
         ];
+    }
+
+    public function getBreadcrumbs(): array
+    {
+        return [AcademiesResource::geturl() => 'Academias', 'Aula', 'Criar'];
     }
 }

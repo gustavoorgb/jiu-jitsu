@@ -25,7 +25,7 @@ class Academy extends Model
         return $this->belongsTo(Academy::class, 'parent_academy_id');
     }
 
-    public function children(): HasMany
+    public function branches(): HasMany
     {
         return $this->hasMany(Academy::class, 'parent_academy_id');
     }

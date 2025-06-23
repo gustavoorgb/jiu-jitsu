@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Lesson extends Model
@@ -37,9 +36,8 @@ class Lesson extends Model
         return $this->hasMany(ClassSchedule::class);
     }
 
-    public function users(): HasManyThrough
+    public function classUsers(): HasMany
     {
-        return $this->hasManyThrough(User::class, ClassUser::class, 'user_id', 'id');
-
+        return $this->hasMany(ClassUser::class);
     }
 }

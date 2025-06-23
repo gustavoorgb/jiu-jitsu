@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ClassUser extends Pivot
@@ -23,7 +24,7 @@ class ClassUser extends Pivot
     protected function casts()
     {
         return [
-            'is_instructor' => 'int',
+            'is_instructor' => 'boolean',
         ];
     }
 
@@ -35,6 +36,11 @@ class ClassUser extends Pivot
     public function lesson(): BelongsTo
     {
         return $this->belongsTo(Lesson::class);
+    }
+
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(ClassAttendance::class);
     }
 
     public function isInstructor(): bool

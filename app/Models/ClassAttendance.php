@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ClassAttendance extends Model
+class ClassAttendance extends Pivot
 {
     use HasFactory;
 
@@ -14,4 +15,14 @@ class ClassAttendance extends Model
         'class_schedule_id',
         'attendance_date',
     ];
+
+    public function classUser(): BelongsTo
+    {
+        return $this->belongsTo(ClassUser::class);
+    }
+
+    public function classSchedule(): BelongsTo
+    {
+        return $this->belongsTo(ClassSchedule::class);
+    }
 }

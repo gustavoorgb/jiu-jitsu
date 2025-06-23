@@ -3,9 +3,11 @@
 namespace App\Filament\Resources;
 
 use App\Enums\BeltsEnum;
-use App\Filament\Resources\ClassUserResource\Pages;
+use App\Filament\Resources\ClassAttendanceResource\Pages\ListClassAttendances;
+use App\Filament\Resources\ClassUserResource\Pages\CreateClassUser;
+use App\Filament\Resources\ClassUserResource\Pages\EditClassUser;
 use App\Filament\Resources\ClassUserResource\Pages\ListClassUsers;
-use App\Filament\Traits\HasParentResource;
+use App\Filament\Resources\ClassUsersResource\RelationManagers\ClassAttendaceRelationManager;
 use App\Models\ClassUser;
 use App\Models\User;
 use Closure;
@@ -17,29 +19,19 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
 
 class ClassUsersResource extends Resource
 {
-    use HasParentResource;
-
     protected static ?string $model = ClassUser::class;
 
     protected static ?string $navigationLabel = null;
 
     protected static bool $shouldRegisterNavigation = false;
-
-    public static string $parentResource = LessonResource::class;
-
-    // public static string $relationshipKey = 'class_users';
-    // public static function getRecordTitle(?Model $record): string|null|Htmlable
-    // {
-    //     return $record?->street ?? 'Endereço';
-    // }
 
     public static function getNavigationItems(): array
     {
@@ -107,15 +99,19 @@ class ClassUsersResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->url(fn (ListClassUsers $livewire, Model $record): string => static::$parentResource::getUrl('aula-aluno.edit', [
-                    'parent' => $livewire->parent,
-                    'record' => $record,
-                ])),
-                DeleteAction::make()->label('Deletar')
-                    ->modalHeading('Confirmar exclusão')
-                    ->modalDescription('Tem certeza que deseja deletar esta academia? Esta ação não pode ser desfeita.')
-                    ->modalSubmitActionLabel('Deletar')
-                    ->modalCancelActionLabel('Cancelar'),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Action::make('frequencia')
+                        ->label('Frequência')
+                        ->icon('heroicon-o-clock')
+                        ->url(fn (ClassUser $record) => ListClassAttendances::getUrl(['parent' => $record->id]))
+                        ->color('primary'),
+                    DeleteAction::make()->label('Deletar')
+                        ->modalHeading('Confirmar exclusão')
+                        ->modalDescription('Tem certeza que deseja deletar esta academia? Esta ação não pode ser desfeita.')
+                        ->modalSubmitActionLabel('Deletar')
+                        ->modalCancelActionLabel('Cancelar'),
+                ]),
 
             ])
             ->bulkActions([
@@ -128,16 +124,16 @@ class ClassUsersResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ClassAttendaceRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListClassUsers::route('/'),
-            'create' => Pages\CreateClassUser::route('/create'),
-            'edit' => Pages\EditClassUser::route('/{record}/edit'),
+            'index' => ListClassUsers::route('aula-aluno'),
+            'create' => CreateClassUser::route('adicionar'),
+            'edit' => EditClassUser::route('{record}/editar'),
         ];
     }
 }

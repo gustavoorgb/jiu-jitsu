@@ -3,16 +3,11 @@
 namespace App\Filament\Resources\AcademiesResource\Pages;
 
 use App\Filament\Resources\AcademiesResource;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditAcademies extends EditRecord
+class ViewAcademy extends ViewRecord
 {
     protected static string $resource = AcademiesResource::class;
-
-    protected function getRedirectUrl(): string
-    {
-        return AcademiesResource::getUrl('index');
-    }
 
     public function hasCombinedRelationManagerTabsWithContent(): bool
     {

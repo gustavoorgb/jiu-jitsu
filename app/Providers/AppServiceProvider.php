@@ -9,33 +9,34 @@ use Filament\Facades\Filament;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
     /**
      * Register any application services.
      */
-    public function register(): void {
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {
+    public function boot(): void
+    {
         FilamentIcon::register([
             'panels::pages.dashboard.navigation-item' => 'icon-dashboard',
         ]);
-        // Filament::serving(function () {
-        //     CreateAction::configureUsing(function (CreateAction $action) {
-        //         $action->successNotificationTitle('Registro criado com sucesso!');
-        //     });
+        Filament::serving(function () {
+            CreateAction::configureUsing(function (CreateAction $action) {
+                $action->successNotificationTitle('Registro criado com sucesso!');
+            });
 
-        //     EditAction::configureUsing(function (EditAction $action) {
-        //         $action->successNotificationTitle('Registro atualizado com sucesso!');
-        //     });
+            EditAction::configureUsing(function (EditAction $action) {
+                $action->successNotificationTitle('Registro atualizado com sucesso!');
+            });
 
-        //     DeleteAction::configureUsing(function (DeleteAction $action) {
-        //         $action->successNotificationTitle('Registro excluído com sucesso!');
-        //     });
-        // });
+            DeleteAction::configureUsing(function (DeleteAction $action) {
+                $action->successNotificationTitle('Registro excluído com sucesso!');
+            });
+        });
 
     }
 }

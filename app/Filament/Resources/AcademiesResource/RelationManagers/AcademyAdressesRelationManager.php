@@ -1,51 +1,28 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\AcademiesResource\RelationManagers;
 
-use App\Filament\Resources\AcademyAddressResource\Pages;
-use App\Models\AcademyAddress;
 use App\Models\City;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 
-class AcademyAddressResource extends Resource
+class AcademyAdressesRelationManager extends RelationManager
 {
-    protected static ?string $model = AcademyAddress::class;
+    protected static string $relationship = 'address';
 
-    protected static ?string $navigationLabel = null;
-
-    protected static bool $shouldRegisterNavigation = false;
-
-    public static string $parentResource = AcademiesResource::class;
-
-    public static function getRecordTitle(?Model $record): string|null|Htmlable
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return $record?->street ?? 'Endereço';
+        return 'Endereços';
     }
 
-    public static function getNavigationItems(): array
-    {
-        return [];
-    }
-
-    public static function getSlug(): string
-    {
-        return 'academia-endereco';
-    }
-
-    public static function getLabel(): string
-    {
-        return 'Endereço';
-    }
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -63,44 +40,36 @@ class AcademyAddressResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
-            ->recordUrl(null)
+            ->recordAction(null)
             ->columns([
                 TextColumn::make('street')->label('Bairro'),
                 TextColumn::make('number')->label('Número'),
                 TextColumn::make('complement')->label('Complemento'),
                 TextColumn::make('cep')->label('CEP')->formatStateUsing(fn ($state) => preg_replace('/(\d{5})(\d{3})/', '$1-$2', $state)),
                 TextColumn::make('city.city')->label('Cidade'),
-                TextColumn::make('academy.name')->label('Academia'),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()->label('Adicionar Endereço'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->label('Deletar')
-                    ->modalHeading('Excluir endereço')
-                    ->modalDescription('Tem certeza que deseja excluir este endereço?')
-                    ->modalSubmitActionLabel('Sim, excluir')
-                    ->modalCancelActionLabel('Cancelar'),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()->label('Deletar')
+                        ->modalHeading('Excluir endereço')
+                        ->modalDescription('Tem certeza que deseja excluir este endereço?')
+                        ->modalSubmitActionLabel('Sim, excluir')
+                        ->modalCancelActionLabel('Cancelar'), ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListAcademyAddress::route('/'),
-            'create' => Pages\CreateAcademyAddress::route('/adicionar'),
-            'edit' => Pages\EditAcademyAddress::route('/{record}/editar'),
-        ];
     }
 }
