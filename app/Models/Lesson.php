@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BeltsEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +23,7 @@ class Lesson extends Model
     protected function casts()
     {
         return [
-            'min_belt' => 'int',
+            'min_belt' => BeltsEnum::class,
         ];
     }
 

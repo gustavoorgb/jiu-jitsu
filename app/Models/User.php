@@ -96,7 +96,7 @@ class User extends Authenticatable implements FilamentUser
     public static function getUsersStudents(): Collection
     {
         return self::whereHas('roles', function ($query) {
-            $query->where('role', '!=', RolesEnum::ADMIN->value);
+            $query->where('role', RolesEnum::STUDENT->value);
         })
             ->get();
 
