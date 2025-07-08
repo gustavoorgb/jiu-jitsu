@@ -69,7 +69,7 @@ class UserRoleResource extends Resource
                             ->toArray();
                     }),
 
-                Select::make('role_id')
+                Select::make('role')
                     ->label('Papel na Academia')
                     ->required()
                     ->options(

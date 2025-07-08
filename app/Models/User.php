@@ -6,18 +6,15 @@ namespace App\Models;
 
 use App\Enums\BeltsEnum;
 use App\Enums\RolesEnum;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Panel;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
@@ -75,16 +72,6 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(UserRole::class);
     }
 
-    public function roles(): HasManyThrough
-    {
-        return $this->hasManyThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
-    }
-
-    public function hasRole(RolesEnum $role): bool
-    {
-        return $this->roles->contains('role', $role);
-    }
-
     public function lessons(): BelongsToMany
     {
         return $this->belongsToMany(Lesson::class, 'class_users', 'user_id', 'lesson_id')
@@ -100,15 +87,5 @@ class User extends Authenticatable implements FilamentUser
         })
             ->get();
 
-    }
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return match ($panel->getId()) {
-            'admin' => $this->hasRole(RolesEnum::ADMIN),
-            'instrutor' => $this->hasRole(RolesEnum::INSTRUCTOR),
-            'aluno' => $this->hasRole(RolesEnum::STUDENT),
-            'default' => false,
-        };
     }
 }

@@ -39,7 +39,7 @@ class UserRolesRelationManager extends RelationManager
                             ->toArray();
                     }),
 
-                Select::make('role_id')
+                Select::make('role')
                     ->label('Papel na Academia')
                     ->required()
                     ->options(
@@ -60,7 +60,7 @@ class UserRolesRelationManager extends RelationManager
                                     BeltsEnum::MARROM->value,
                                     BeltsEnum::PRETA->value,
                                 ];
-                                if (! in_array($user->belt, $beltsForInstructor) && $value) {
+                                if (! in_array($user->belt->value, $beltsForInstructor) && $value) {
                                     $fail("Aluno(a) {$user->name} não tem graduação suficiente para ser instrutor!");
                                 }
                             }
@@ -75,8 +75,7 @@ class UserRolesRelationManager extends RelationManager
             ->recordAction(null)
             ->columns([
                 TextColumn::make('user.name')->label('Usúario'),
-                TextColumn::make('role.role_label')->label('Papel'),
-            ])
+                TextColumn::make('role')->label('Papel')->formatStateUsing(fn ($state) => $state->label())])
             ->filters([
                 //
             ])
