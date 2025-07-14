@@ -82,7 +82,7 @@ class User extends Authenticatable
 
     public static function getUsersStudents(): Collection
     {
-        return self::whereHas('roles', function ($query) {
+        return self::whereHas('userRoles', function ($query) {
             $query->where('role', RolesEnum::STUDENT->value);
         })
             ->get();

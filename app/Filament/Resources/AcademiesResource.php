@@ -118,15 +118,15 @@ class AcademiesResource extends Resource
         ];
     }
 
-    protected function getAllRelationManagers(): array
-    {
-        return [
-            AcademyAdressesRelationManager::class,
-            LessonRelationManager::class,
-            UserRolesRelationManager::class,
-            BranchesRelationManager::class,
-        ];
-    }
+    // protected function getAllRelationManagers(): array
+    // {
+    //     return [
+    //         AcademyAdressesRelationManager::class,
+    //         LessonRelationManager::class,
+    //         UserRolesRelationManager::class,
+    //         BranchesRelationManager::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {

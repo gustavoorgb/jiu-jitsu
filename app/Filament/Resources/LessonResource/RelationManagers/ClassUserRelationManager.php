@@ -28,9 +28,22 @@ class ClassUserRelationManager extends RelationManager
             ->schema([
                 Select::make('user_id')
                     ->label('Aluno')
-                    ->options(fn (User $user) => $user->getUsersStudents()->pluck('name', 'id'))
+                    ->options(User::getUsersStudents()->pluck('name', 'id')->toArray())
                     ->required()
-                    ->unique(ClassUser::class, 'user_id'),
+                    ->rules([
+                        fn (Get $get): Closure => function (string $attribute, $value, Closure $fail) {
+                            $lesson = $this->getOwnerRecord();
+                            $lessonId = $lesson->id;
+
+                            $alreadyExists = ClassUser::where('lesson_id', $lessonId)
+                                ->where('user_id', $value)
+                                ->exists();
+
+                            if ($alreadyExists) {
+                                $fail('Este aluno já está vinculado a esta aula.');
+                            }
+                        },
+                    ]),
                 Checkbox::make('is_instructor')
                     ->label('Instrutor')
                     ->inline(false)

@@ -73,6 +73,7 @@ class UserRolesRelationManager extends RelationManager
     {
         return $table
             ->recordAction(null)
+            ->emptyStateDescription('Adicione um vínculo para começar.')
             ->columns([
                 TextColumn::make('user.name')->label('Usúario'),
                 TextColumn::make('role')->label('Papel')->formatStateUsing(fn ($state) => $state->label())])
@@ -80,7 +81,7 @@ class UserRolesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->label('Adicionar Vínculo'),
+                Tables\Actions\CreateAction::make()->label('Adicionar Vínculo')->modalHeading('Adicionar Vínculo'),
             ])
             ->actions([
                 ActionGroup::make([
